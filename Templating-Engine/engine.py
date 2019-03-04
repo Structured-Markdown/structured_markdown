@@ -60,8 +60,6 @@ def parse(lines, name="root"):
                     lines = lines[index:]
                     break
                 scope.append(remove_ind(line, ind_types, ind))
-            print(*scope, sep="")
-            #print(parse(scope, name=scope_name), end="\n\n")
             html = html + parse(scope, name=scope_name)
 
         # if it's not a formatting line, add it to the markdown block
