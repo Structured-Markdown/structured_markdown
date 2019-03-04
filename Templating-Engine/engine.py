@@ -73,7 +73,7 @@ def parse(lines, name="root"):
     return "<div class='{}'>".format(name) + html + "</div>"
 
 if __name__ == "__main__":
-    file = "example.md"
+    file = "example.smd"
     with open(file, "r") as fin:
         parsed = parse([str(line) for line in fin])
     print(parsed)
