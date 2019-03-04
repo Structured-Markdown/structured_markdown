@@ -1,49 +1,81 @@
 import mistune
 
-def get_indentation(line):
-    return len(line) - len(line.lstrip(' '))
+def tokenize(line, chars):
+    for char in chars:
+        line = line.replace(char, " {} ".format(char))
+    return line.split()
 
-def get_markdown(to_markdown):
-    return mistune.markdown(to_markdown)
+def get_ind(line):
+    return line.replace(line.lstrip(), "")
 
-def parse(to_parse, div_class="root"):
-    """
-    to_parse: a list of strings
-    returns: one html string
-    """
-    parsed = ""
-    to_markdown = ""
+def remove_ind(line, ind_types, ind):
+    return line[ind_types[ind]:]
 
-    index = 0
-    while index < len(to_parse):
-        line = to_parse[index]
-        indentation = get_indentation(line)
-        line = line.strip()
-        tokens = line.split()
+def parse(lines, name="root"):
+    # html and markdown blocks
+    html = ""
+    markdown = ""
 
-        if line[-1] == ":":
-            parsed = parsed + get_markdown(to_markdown)
-            to_markdown = ""
+    # dict of valid indentation types
+    ind_types = {
+        None: 0,
+        "\t": 1,
+        "  ": 2,
+        "    ": 4,
+    }
 
+    # first thing is to determine the indentation type
+    for line in lines:
+        ind = line.replace(line.lstrip(), "")
+        if ind in ind_types:
+            break
+        ind = None
+
+    # list of indentation indicators and keywords
+    ind_ind = [":"]
+    keywords = ["layer"]
+
+    while len(lines) > 0:
+        # tokenize the zerost line, pop it from the queue
+        line = lines.pop(0)
+        tokens = tokenize(line, ind_ind)
+
+        # make sure the line isn't blank
+        if len(tokens) == 0:
+            markdown = markdown + "\n"
+
+        # check for keywords and indentation indicators
+        elif tokens[0] in keywords and tokens[-1] in ind_ind:
+            # get the name of the indented block
+            scope_name = " ".join(tokens[1:-1])
+
+            # parse and clear markdown block
+            html = html + mistune.markdown(markdown)
+            markdown = ""
+
+            # go through the program and get the indented code scope
             scope = []
-            for future_index in range(len(to_parse[index + 1:])):
-                future_line = to_parse[future_index]
-                if get_indentation(future_line) <= indentation:
+            for index, line in enumerate(lines):
+                if get_ind(line) == "":
+                    lines = lines[index:]
                     break
-                scope.append(future_line)
+                scope.append(remove_ind(line, ind_types, ind))
+            print(*scope, sep="")
+            #print(parse(scope, name=scope_name), end="\n\n")
+            html = html + parse(scope, name=scope_name)
 
-            parsed = parsed + parse(scope, div_class=tokens[-1][:-1])
+        # if it's not a formatting line, add it to the markdown block
+        else:
+            markdown = markdown + remove_ind(line, ind_types, ind)
 
-        else: to_markdown = to_markdown + to_parse[index].lstrip()
+    # add in any trailing markdown, clear the markdown block (a bit unnessary, tbh) and return
+    html = html + mistune.markdown(markdown)
+    markdown = ""
+    #print(html)
+    return "<div name='{}'>".format(name) + html + "</div>"
 
-        index += 1
-
-    if to_markdown != "": parsed = parsed + get_markdown(to_markdown)
-
-    return "<div class={}>".format(div_class) + parsed + "</div>"
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     file = "example.md"
     with open(file, "r") as fin:
         parsed = parse([str(line) for line in fin])
-        print(parsed)
+    print(parsed)

@@ -23,9 +23,10 @@ layer body:
   [This is a link to nowhere...](/boop)
 
   Well, that's about all I have to say...
-  There are still some kinks to work out, I plan to add the ability to style and stuff.
+  There are still `some` kinks to work out, I plan to add the ability to style and stuff.
   (And make the html it returns have proper formatting.)
   Bye!
 
 layer footer:
   (c) 2018 Me.
+  Boop
