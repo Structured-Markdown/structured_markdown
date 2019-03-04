@@ -70,7 +70,7 @@ def parse(lines, name="root"):
     if html == "":
         html = html + mistune.markdown(markdown)
     markdown = ""
-    return "<div name='{}'>".format(name) + html + "</div>"
+    return "<div class='{}'>".format(name) + html + "</div>"
 
 if __name__ == "__main__":
     file = "example.md"
