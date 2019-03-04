@@ -67,9 +67,9 @@ def parse(lines, name="root"):
             markdown = markdown + remove_ind(line, ind_types, ind)
 
     # add in any trailing markdown, clear the markdown block (a bit unnessary, tbh) and return
-    html = html + mistune.markdown(markdown)
+    if html == "":
+        html = html + mistune.markdown(markdown)
     markdown = ""
-    #print(html)
     return "<div name='{}'>".format(name) + html + "</div>"
 
 if __name__ == "__main__":
