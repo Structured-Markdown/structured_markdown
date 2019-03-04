@@ -2,11 +2,11 @@ layer navbar:
   layer logotype:
     **Templating Engine**
   layer navlinks:
-    navlink:
+    layer navlink:
       [blog](/blog)
-    navlink:
+    layer navlink:
       [about](/about)
-    navlink:
+    layer navlink:
       [projects](/projects)
 
 layer body:
@@ -14,7 +14,7 @@ layer body:
   Welcome to my templating engine thingy.
   This is essentially **heirarchal markdown**.
   I'm planning to call ~~Formatted~~ Structured Markdown, or something.
-    
+
   Anyway, I'm just seeing how effective it is by writing it out like this.
   (Oh, this should be a new paragraph, btw.)
 
@@ -28,4 +28,4 @@ layer body:
   Bye!
 
 layer footer:
- (c) 2018 Me.
+  (c) 2018 Me.
