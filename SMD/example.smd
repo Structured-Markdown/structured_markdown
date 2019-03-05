@@ -1,32 +1,38 @@
 layer navbar:
-  layer logotype:
-    **Templating Engine**
-  layer navlinks:
-    layer navlink:
-      [blog](/blog)
-    layer navlink:
-      [about](/about)
-    layer navlink:
-      [projects](/projects)
+    layer logotype:
+        # Templating Engine
+    layer navlinks:
+        1. [blog](/blog)
+        2. [about](/about)
+        3. [projects](/projects)
 
 layer body:
-  # Hello, everyone!
-  Welcome to my templating engine thingy.
-  This is essentially **heirarchal markdown**.
-  I'm planning to call ~~Formatted~~ Structured Markdown, or something.
+    # Hello, everyone!
+    Welcome to my templating engine thingy.
+    This is essentially **heirarchal markdown**.
+    I'm planning to call ~~Formatted~~ Structured Markdown, or something.
 
-  Anyway, I'm just seeing how effective it is by writing it out like this.
-  (Oh, this should be a new paragraph, btw.)
+    Anyway, I'm just seeing how effective it is by writing it out like this.
+    (Oh, this should be a new paragraph, btw.)
 
-  ## This is a section header
-  That's cool.
-  [This is a link to nowhere...](/boop)
+    ## This is a section header
+    That's cool.
+    [This is a link to nowhere...](/boop)
 
-  Well, that's about all I have to say...
-  There are still `some` kinks to work out, I plan to add the ability to style and stuff.
-  (And make the html it returns have proper formatting.)
-  Bye!
+    layer side note:
+        Woah, this is a side note.
+        **why are you paying attention to it?**
+
+    Well, that's about all I have to say...
+    There are still `some` kinks to work out, I plan to add the ability to style and stuff.
+    (And make the html it returns have proper formatting.)
+    Bye!
+
+    ```
+    code code code
+        hey hey hey
+    ```
 
 layer footer:
-  (c) 2018 Me.
-  Boop
+    (c) 2018 Me.
+    Boop

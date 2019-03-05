@@ -1,81 +1,104 @@
 import mistune
 
-def tokenize(line, chars):
-    for char in chars:
-        line = line.replace(char, " {} ".format(char))
-    return line.split()
+class Parser:
+    def __init__(self, file):
+        # stringify each line, and replace tabs with spaces
+        self.file = file
+        self.valid_ind = ["  ", "    "]
+        self.ind = None
+        self.ind_inds = list(":") # indentation indicators
+        self.keywords = [
+            "layer"
+        ]
 
-def get_ind(line):
-    return line.replace(line.lstrip(), "")
+        with open(self.file, "r") as fin:
+            self.dirty_lines = [str(line).replace("\t", self.valid_ind[0]) for line in fin]
 
-def remove_ind(line, ind_types, ind):
-    return line[ind_types[ind]:]
+        # infer the indentation for parsing
+        self.ind = self._infer_ind(self.dirty_lines)
 
-def parse(lines, name="root"):
-    # html and markdown blocks
-    html = ""
-    markdown = ""
+        # clean up the lines
+        self.lines = self._cleanse(self.dirty_lines)
 
-    # dict of valid indentation types
-    ind_types = {
-        None: 0,
-        "\t": 1,
-        "  ": 2,
-        "    ": 4,
-    }
+        # tokenize and parse the file
+        self.html = self._parse(self.lines)
 
-    # first thing is to determine the indentation type
-    for line in lines:
-        ind = line.replace(line.lstrip(), "")
-        if ind in ind_types:
-            break
-        ind = None
+    def __call__(self):
+        return self.html
 
-    # list of indentation indicators and keywords
-    ind_ind = [":"]
-    keywords = ["layer"]
+    def _indentation(self, line):
+        return line.replace(line.lstrip(), "")
 
-    while len(lines) > 0:
-        # tokenize the zerost line, pop it from the queue
-        line = lines.pop(0)
-        tokens = tokenize(line, ind_ind)
+    def _infer_ind(self, dirty_lines):
+        for line_number, line in enumerate(dirty_lines, 1):
+            leading = self._indentation(line)
+            if leading in self.valid_ind:
+                return leading
+            if leading != "" and leading not in self.valid_ind:
+                raise IndentationError(
+                    "Line {} in {}: '{}' indentation type unsupported.".format(line_number, self.file, leading)
+                )
+        return ""
 
-        # make sure the line isn't blank
-        if len(tokens) == 0:
-            markdown = markdown + "\n"
+    def _cleanse(self, dirty_lines):
+        ind_levels = []
+        cleansed = []
 
-        # check for keywords and indentation indicators
-        elif tokens[0] in keywords and tokens[-1] in ind_ind:
-            # get the name of the indented block
-            scope_name = " ".join(tokens[1:-1])
+        for line_number, line in enumerate(dirty_lines, 1):
+            leading = self._indentation(line)
+            ind_level = len(leading) / len(self.ind)
 
-            # parse and clear markdown block
-            html = html + mistune.markdown(markdown)
-            markdown = ""
+            if int(ind_level) != ind_level and line != "\n" and line != "":
+                raise IndentationError(
+                    "Line {} in {}: '{}' unexpected indentation type.".format(line_number, self.file, leading)
+                )
 
-            # go through the program and get the indented code scope
-            scope = []
-            for index, line in enumerate(lines):
-                if get_ind(line) == "":
-                    lines = lines[index:]
-                    break
-                scope.append(remove_ind(line, ind_types, ind))
-            html = html + parse(scope, name=scope_name)
+            ind_level = int(ind_level)
+            line = line.strip()
 
-        # if it's not a formatting line, add it to the markdown block
-        else:
-            markdown = markdown + remove_ind(line, ind_types, ind)
+            ind_levels.append(ind_level)
+            cleansed.append(line)
 
-    # add in any trailing markdown, clear the markdown block (a bit unnessary, tbh) and return
-    if html == "":
-        html = html + mistune.markdown(markdown)
-    markdown = ""
-    return "<div class='{}'>\n".format(name) \
-           + "\n".join(["  " + line for line in html.split("\n")[:-1]]) \
-           + "\n" + "</div>\n"
+        # make named tuple, maybe?
+        return list(zip(ind_levels, cleansed))
+
+    def _tokenize(self, line):
+        for token in self.ind_inds:
+            line = line.replace(token, " {} ".format(token))
+        return " ".join(line.split()).split()
+
+    def _parse(self, lines, name="root"):
+        markdown = []
+        html = ""
+
+        while len(lines) > 0:
+            line = lines.pop(0)
+            tokenized = self._tokenize(line[1])
+
+            if tokenized == []:
+                markdown.append("")
+            elif tokenized[0] in self.keywords and tokenized[-1] in self.ind_inds:
+                # ideally define abstract behaviours in different functions, this should work for now
+                scope_name = "-".join(tokenized[1:-1])
+                scope = []
+                while len(lines) > 0:
+                    if lines[0][0] == 0 and self._tokenize(lines[0][1]) != []:
+                        break
+                    line = lines.pop(0)
+                    scope.append((line[0] - 1, line[1]))
+
+                html = html + mistune.markdown("\n".join(markdown) + "\n")
+                html = html + self._parse(lines=scope, name=scope_name)
+
+                markdown = []
+            else:
+                markdown.append(line[1])
+
+        html = html + mistune.markdown("\n".join(markdown) + "\n")
+
+        return "<div class={}>\n".format(name) \
+               + "\n".join(["  " + line for line in html.split("\n")[:-1]]) \
+               + "\n</div>\n"
 
 if __name__ == "__main__":
-    file = "example.smd"
-    with open(file, "r") as fin:
-        parsed = parse([str(line) for line in fin])
-    print(parsed)
+    print(Parser("example.smd")())
