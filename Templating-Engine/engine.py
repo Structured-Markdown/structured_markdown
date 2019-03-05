@@ -70,7 +70,9 @@ def parse(lines, name="root"):
     if html == "":
         html = html + mistune.markdown(markdown)
     markdown = ""
-    return "<div class='{}'>".format(name) + html + "</div>"
+    return "<div class='{}'>\n".format(name) \
+           + "\n".join(["  " + line for line in html.split("\n")[:-1]]) \
+           + "\n" + "</div>\n"
 
 if __name__ == "__main__":
     file = "example.smd"
