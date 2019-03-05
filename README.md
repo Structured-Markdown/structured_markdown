@@ -22,7 +22,7 @@ layer welcome:
 ```
 
 This is a block of markdown within a layer whose name is `welcome`.
-Because this is a parser, it returns html:
+Here is the equivalent html.
 
 ```html
 <div class='root'>
