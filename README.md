@@ -5,7 +5,7 @@ So, how does it work?
 
 ## Overview
 SMD is currently a python module that, when given a Structured Markdown (SMD) file, will produce a formatted html string.
-Currently, the module uses mistune to parse the markdown - the parsing, however is down by this
+Currently, the module uses mistune to parse the markdown - the parsing, however is down by this.
 The general idea is that a static site could use these easy-to-write SMD files in place of html templates or the like.
 
 ## SMD vs MD
