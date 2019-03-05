@@ -60,6 +60,7 @@ Which becomes:
     <p>more markdown after the nesting</p>
   </div>
 </div>
+```
 
 That's about it for now.
 Not all features are implemented as this is still a WIP.
