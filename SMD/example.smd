@@ -1,10 +1,10 @@
 layer navbar:
     layer logotype:
-        # Templating Engine
+        **Templating Engine**
     layer navlinks:
-        1. [blog](/blog)
-        2. [about](/about)
-        3. [projects](/projects)
+        * [blog](/blog)
+        * [about](/about)
+        * [projects](/projects)
 
 layer body:
     # Hello, everyone!
@@ -21,6 +21,7 @@ layer body:
 
     layer side note:
         Woah, this is a side note.
+        I can put emojis in. 🙌
         **why are you paying attention to it?**
 
     Well, that's about all I have to say...
