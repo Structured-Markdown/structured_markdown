@@ -76,17 +76,19 @@ layer navbar:
 
 Note that the expanded html is longer and more verbose.
 
-```html```
-<div class='navbar'>
-  <div class='logotype'>
-    <h1>Templating Engine</h1>
-  </div>
-  <div class='navlinks'>
-    <ol>
-    <li><a href="/blog">blog</a></li>
-    <li><a href="/about">about</a></li>
-    <li><a href="/projects">projects</a></li>
-    </ol>
+```html
+<div class='root'>
+  <div class='navbar'>
+    <div class='logotype'>
+      <h1>Templating Engine</h1>
+    </div>
+    <div class='navlinks'>
+      <ol>
+      <li><a href="/blog">blog</a></li>
+      <li><a href="/about">about</a></li>
+      <li><a href="/projects">projects</a></li>
+      </ol>
+    </div>
   </div>
 </div>
 ```
