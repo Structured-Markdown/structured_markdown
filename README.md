@@ -9,7 +9,7 @@ The general idea is that a static site could use these easy-to-write SMD files i
 
 ## SMD vs MD
 All squares are rectangles, but not all rectangles are squares.
-The same can be said of SMD. 
+The same can be said of SMD - Markdown documents are valid SMD documents, but not necessarily the other way around.
 With that out of the way, what's the difference?
 
 A SMD document is made of layers.
@@ -22,7 +22,7 @@ layer welcome:
 ```
 
 This is a block of markdown within a layer whose name is `welcome`.
-Because this is a parser, it returns html:
+Here is the equivalent html.
 
 ```html
 <div class='root'>
@@ -60,6 +60,38 @@ Which becomes:
     <p>more markdown after the nesting</p>
   </div>
 </div>
+```
+
+Where it really shines is when text is wrapped in complex formatting, like this navbar example:
+
+```
+layer navbar:
+    layer logotype:
+        # Templating Engine
+    layer navlinks:
+        1. [blog](/blog)
+        2. [about](/about)
+        3. [projects](/projects)
+```
+
+Note that the expanded html is longer and more verbose.
+
+```html
+<div class='root'>
+  <div class='navbar'>
+    <div class='logotype'>
+      <h1>Templating Engine</h1>
+    </div>
+    <div class='navlinks'>
+      <ol>
+      <li><a href="/blog">blog</a></li>
+      <li><a href="/about">about</a></li>
+      <li><a href="/projects">projects</a></li>
+      </ol>
+    </div>
+  </div>
+</div>
+```
 
 That's about it for now.
 Not all features are implemented as this is still a WIP.
