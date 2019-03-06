@@ -135,12 +135,3 @@ class StructuredMarkdown:
             lines = self.lines
 
         return ""
-
-if __name__ == "__main__":
-    example_file = "example.smd"
-
-    with open(example_file, "r") as fin:
-        inp = fin.read()
-
-    example = StructuredMarkdown(inp)
-    print(example.html())
