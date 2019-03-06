@@ -1,9 +1,3 @@
-style all:
-    font-family = sans-serif
-
-style navbar:
-    list-style = none
-
 layer navbar:
     layer logotype:
         **Templating Engine**
