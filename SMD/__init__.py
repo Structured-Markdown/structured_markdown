@@ -1,1 +1,1 @@
-from SMD-Python import *
+from SMD import *
