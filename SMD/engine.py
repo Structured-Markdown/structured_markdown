@@ -8,7 +8,8 @@ class Parser:
         self.ind = None
         self.ind_inds = list(":") # indentation indicators
         self.keywords = [
-            "layer"
+            "layer",
+            "style"
         ]
 
         with open(self.file, "r") as fin:
@@ -67,9 +68,27 @@ class Parser:
             line = line.replace(token, " {} ".format(token))
         return " ".join(line.split()).split()
 
+    def _styling(self, lines, selector):
+        for indentation, line in lines:
+            if indentation != 1:
+                raise IndentationError("Variable indentation in styling block")
+            try:
+                element, value = list(map(lambda x: x.strip, line.split("=")))
+            except:
+                raise Exception("Incorrect styling assignment")
+
+        # TODO: parse and return styling, implement branching logic in _parse
+
     def _parse(self, lines, name="root"):
+        if isinstance(name, list):
+            if len(name) != 1:
+                raise Exception("Space in layer name")
+            else:
+                name = name[0]
+
         markdown = []
         html = ""
+        css = ""
 
         while len(lines) > 0:
             line = lines.pop(0)
@@ -79,7 +98,7 @@ class Parser:
                 markdown.append("")
             elif tokenized[0] in self.keywords and tokenized[-1] in self.ind_inds:
                 # ideally define abstract behaviours in different functions, this should work for now
-                scope_name = "-".join(tokenized[1:-1])
+                scope_name = tokenized[1:-1]
                 scope = []
                 while len(lines) > 0:
                     if lines[0][0] == 0 and self._tokenize(lines[0][1]) != []:
@@ -96,7 +115,7 @@ class Parser:
 
         html = html + mistune.markdown("\n".join(markdown) + "\n")
 
-        return "<div class={}>\n".format(name) \
+        return "<div class='{}'>\n".format(name) \
                + "\n".join(["  " + line for line in html.split("\n")[:-1]]) \
                + "\n</div>\n"
 
