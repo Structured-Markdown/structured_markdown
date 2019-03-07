@@ -1,4 +1,5 @@
 import mistune
+import copy
 
 class Line:
     __slots__ = ("line", "ind_type", "ind", "ind_level")
@@ -90,7 +91,7 @@ class StructuredMarkdown:
         markdown = ""
 
         if lines is None:
-            lines = self.lines.copy()
+            lines = copy.deepcopy(self.lines)
 
         while len(lines) > 0:
             line = lines.pop(0)
@@ -110,7 +111,9 @@ class StructuredMarkdown:
                     if int(line) <= 0 and str(line) != "":
                         lines.insert(0, line)
                         break
-                    scope.append(Line(str(line), ind_type=self.ind_type, ind=line.ind-1))
+
+                    line.ind -= 1
+                    scope.append(line)
 
                 if tokenized[0] == "layer":
                     html = html + mistune.markdown(markdown)
@@ -136,7 +139,7 @@ class StructuredMarkdown:
         css = ""
 
         if lines is None:
-            lines = self.lines.copy()
+            lines = copy.deepcopy(self.lines)
 
         if selector is None:
             while len(lines) > 0:
@@ -150,7 +153,9 @@ class StructuredMarkdown:
                         if int(line) <= 0 and str(line) != "":
                             lines.insert(0, line)
                             break
-                        scope.append(Line(str(line), ind_type=self.ind_type, ind=line.ind-1))
+
+                        line.ind -= 1
+                        scope.append(line)
 
                     if tokenized[0] == "style":
                         scope_selector = " ".join(tokenized[1:-1])
