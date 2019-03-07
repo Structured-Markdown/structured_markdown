@@ -7,3 +7,4 @@ with open(example_file, "r") as fin:
 
 example = engine.StructuredMarkdown(inp)
 print(example.css())
+print(example.html())

@@ -90,13 +90,20 @@ class StructuredMarkdown:
         markdown = ""
 
         if lines is None:
-            lines = self.lines
+            lines = self.lines.copy()
 
         while len(lines) > 0:
             line = lines.pop(0)
             tokenized = self._tokenize(line)
 
             if tokenized != [] and tokenized[0] in self.keywords and tokenized[-1] == ":":
+                scope_name = tokenized[1:-1]
+
+                if len(scope_name) > 1:
+                    raise Exception("Name of a layer contains spaces ({}).".format(" ".join(scope_name)))
+
+                scope_name = scope_name[0]
+
                 scope = []
                 while len(lines) > 0:
                     line = lines.pop(0)
@@ -106,13 +113,6 @@ class StructuredMarkdown:
                     scope.append(Line(str(line), ind_type=self.ind_type, ind=line.ind-1))
 
                 if tokenized[0] == "layer":
-                    scope_name = tokenized[1:-1]
-
-                    if len(scope_name) > 1:
-                        raise Exception("Name of a layer contains spaces ({}).".format(" ".join(scope_name)))
-
-                    scope_name = scope_name[0]
-
                     html = html + mistune.markdown(markdown)
                     markdown = ""
                     html = html + self.html(scope, name=scope_name)
@@ -136,7 +136,7 @@ class StructuredMarkdown:
         css = ""
 
         if lines is None:
-            lines = self.lines
+            lines = self.lines.copy()
 
         if selector is None:
             while len(lines) > 0:
@@ -155,7 +155,6 @@ class StructuredMarkdown:
                     if tokenized[0] == "style":
                         scope_selector = " ".join(tokenized[1:-1])
 
-                        print(scope_selector)
                         for key, value in self.mappings.items():
                             scope_selector = scope_selector.replace(key, value)
 
