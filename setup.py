@@ -5,7 +5,7 @@ with open("README.md", "r") as fin:
 
 setuptools.setup(
     name="structured_markdown",
-    version=0.0,
+    version=0.1,
     description="Add an extra dimension to your markdown documents",
     long_description=long_description,
     url="https://github.com/Structured-Markdown/structured_markdown",
