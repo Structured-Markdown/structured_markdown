@@ -37,3 +37,10 @@ layer body:
 layer footer:
     (c) 2018 Me.
     Boop
+
+style layer:
+    border = 1px solid
+    font-family = sans-serif
+
+style layer.navbar:
+    background-color = #fff
