@@ -1,10 +1,11 @@
-from SMD import engine
+import structured_markdown as smd
 
-example_file = "example.smd"
+path = "example.smd"
 
-with open(example_file, "r") as fin:
+with open(path, "r") as fin:
     inp = fin.read()
 
-example = engine.StructuredMarkdown(inp)
-print(example.css())
-print(example.html())
+html, css = smd.parse(inp)
+print("----------\nsource file {}:\n\n{}".format(path, inp))
+print("----------\nhtml extracted from {}:\n\n{}".format(path, html))
+print("----------\ncss extracted from {}:\n\n{}".format(path, css))
