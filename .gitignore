@@ -1,3 +1,5 @@
 **/.DS_Store
 **/__pycache__
-**/structured_markdown.egg-info
+**/*.egg-info
+**/dist/*
+**/build/*
