@@ -1,4 +1,5 @@
 import mistune
+import copy
 
 class Line:
     __slots__ = ("line", "ind_type", "ind", "ind_level")
@@ -44,6 +45,10 @@ class StructuredMarkdown:
             "layer",
             "style",
         ]
+        self.mappings = {
+            "layer": "div",
+            "all": "*"
+        }
 
         self.dirty = inp.split("\n") # each line in inp
         self.ind_type = self._infer_ind(self.dirty) # infer the indentation from first indent
@@ -86,7 +91,7 @@ class StructuredMarkdown:
         markdown = ""
 
         if lines is None:
-            lines = self.lines
+            lines = copy.deepcopy(self.lines)
 
         while len(lines) > 0:
             line = lines.pop(0)
@@ -106,7 +111,9 @@ class StructuredMarkdown:
                     if int(line) <= 0 and str(line) != "":
                         lines.insert(0, line)
                         break
-                    scope.append(Line(str(line), ind_type=self.ind_type, ind=line.ind-1))
+
+                    line.ind -= 1
+                    scope.append(line)
 
                 if tokenized[0] == "layer":
                     html = html + mistune.markdown(markdown)
@@ -123,7 +130,7 @@ class StructuredMarkdown:
             name, "\n".join(self.ind_type + line for line in html.split("\n")[:-1])
         )
 
-    def css(self, lines=None):
+    def css(self, lines=None, selector=None):
         """
         self: StructuredMarkdown Object
         lines: list of Line Objects to parse, if set to None self.lines is used
@@ -132,6 +139,42 @@ class StructuredMarkdown:
         css = ""
 
         if lines is None:
-            lines = self.lines
+            lines = copy.deepcopy(self.lines)
 
-        return ""
+        if selector is None:
+            while len(lines) > 0:
+                line = lines.pop(0)
+                tokenized = self._tokenize(line)
+
+                if tokenized != [] and tokenized[0] in self.keywords and tokenized[-1] == ":":
+                    scope = []
+                    while len(lines) > 0:
+                        line = lines.pop(0)
+                        if int(line) <= 0 and str(line) != "":
+                            lines.insert(0, line)
+                            break
+
+                        line.ind -= 1
+                        scope.append(line)
+
+                    if tokenized[0] == "style":
+                        scope_selector = " ".join(tokenized[1:-1])
+
+                        for key, value in self.mappings.items():
+                            scope_selector = scope_selector.replace(key, value)
+
+                        css = css + self.css(scope, selector=scope_selector)
+        else:
+            css = "{} {{\n".format(selector)
+
+            for line in lines:
+                if str(line) != "":
+                    attribute = list(map(lambda x: " ".join(x.split()), str(line).split("=")))
+                    if len(attribute) != 2:
+                        raise ValueError("extra or lack of equal sign in style assignment")
+
+                    css = css + self.ind_type + "{}: {};\n".format(*attribute)
+
+            css = css + "}\n"
+
+        return css
