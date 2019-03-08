@@ -28,7 +28,7 @@ def parse(inp, name=None):
     # and {{ name }} has to be a string, int, float, bool, etc.
     smd_instance = StructuredMarkdown(inp)
     return (
-        smd_instance.html(lines, name=name),
+        smd_instance.html(lines=None, name=name),
         smd_instance.css(lines=None, selector=None),
     )
 
