@@ -5,7 +5,7 @@ import setuptools
 # it's better to wait a few days, just for the BotD
 # edit setup.py (this file) and bump the version number
 # the version number reads like follows:
-# Major Release . Feature . Bug fixes
+# Major Release (yearly). Feature (monthtly). Bug fixes (weekly)
 # run the markdown to rst script
 # $ python rst_helper.py
 # git add and git commit change to github, merge with master
