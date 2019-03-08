@@ -31,3 +31,12 @@ def parse(inp, name=None):
         smd_instance.html(lines, name=name),
         smd_instance.css(lines=None, selector=None),
     )
+
+def parse_from_file(file_name, name=None):
+    with open(file_name, "r") as fin:
+        inp = file.read()
+    return parse(inp, name=Name)
+
+def parse_inline_style(file_name, name=None):
+    pass
+    "puts everything into one html document with a head, doctype, body, etc"
