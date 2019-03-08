@@ -120,11 +120,14 @@ class StructuredMarkdown:
                     markdown = ""
                     html = html + self.html(scope, name=scope_name)
             else:
-                markdown = markdown + str(line)
+                markdown = markdown + self.ind_type * int(line) + str(line)
 
             markdown = markdown + "\n"
 
         html = html + mistune.markdown(markdown)
+
+        if name == "root":
+            return html
 
         return "<div class=\"{}\">\n{}\n</div>\n".format(
             name, "\n".join(self.ind_type + line for line in html.split("\n")[:-1])
@@ -178,22 +181,3 @@ class StructuredMarkdown:
             css = css + "}\n"
 
         return css
-
-def parse(inp, html=None, css=None, name="root"):
-
-    if html is None and css is None:
-        html, css = True, True
-    elif html is None:
-        html = False
-    elif css is None:
-        css = False
-        
-    smd_instance = StructuredMarkdown(inp)
-    returned = []
-
-    if html:
-        returned.append(smd_instance.html(lines=None, name=name))
-    if css:
-        returned.append(smd_instance.css(lines=None, selector=None))
-
-    return returned
