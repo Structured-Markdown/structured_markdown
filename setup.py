@@ -17,7 +17,7 @@ import setuptools
 # after that's done, type:
 # $ twine upload dist/*
 # after it's uploaded, install the new version:
-# $ pip install --update structured-markdown
+# $ pip install --upgrade structured-markdown
 
 with open("README.rst", "r") as fin:
     long_description = fin.read()

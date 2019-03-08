@@ -47,7 +47,7 @@ class StructuredMarkdown:
         ]
         self.mappings = {
             "layer": "div",
-            "all": "*"
+            "all": "*",
         }
 
         self.dirty = inp.split("\n") # each line in inp
@@ -81,7 +81,7 @@ class StructuredMarkdown:
 
         return line.split()
 
-    def html(self, lines=None, name="root"):
+    def html(self, lines=None, name=None):
         """
         self: StructuredMarkdown Object
         lines: list of Line Objects to parse, if set to None self.lines is used
@@ -126,7 +126,7 @@ class StructuredMarkdown:
 
         html = html + mistune.markdown(markdown)
 
-        if name == "root":
+        if name == None:
             return html
 
         return "<div class=\"{}\">\n{}\n</div>\n".format(
