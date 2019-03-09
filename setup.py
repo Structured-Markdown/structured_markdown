@@ -9,8 +9,8 @@ import setuptools
 # run the markdown to rst script
 # $ python rst_helper.py
 # git add and git commit change to github, merge with master
-# now, clear out build/* and dist/* and structured_markdown.egg-ingo
-# rm -rf dist build
+# now, clear out build/* and dist/* and structured_markdown.egg-info
+# rm -rf dist build structured_markdown.egg-info
 # cd to the project folder and type in terminal:
 # $ python setup.py develop
 # $ python setup.py sdist bdist_wheel
