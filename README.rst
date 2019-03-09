@@ -2,7 +2,7 @@
 Structured-Markdown
 ===================
 
-I love markdown, but I've always wanted to use it to write more than just "flat" documents. 
+I love markdown, but I've always wanted to use it to write more than just "flat" documents.
 Structured Markdown is an extension to markdown syntax that allows for nesting and styling within markdown documents.
 So, how does it work?
 
@@ -42,7 +42,7 @@ You may also need to install ``mistune``\ , a markdown parser.
 
    pip install mistune
 
-Remember to use ``pip3`` if your working with Python 3. 
+Remember to use ``pip3`` if your working with Python 3.
 I always forget to use ``pip3``\ , so I thought you might like a little reminder 👍.
 
 Usage
@@ -56,7 +56,7 @@ To use SMD in your project, import it like so:
 
 The main purpose of SMD is to parse .smd documents. This is pretty simple in ``structured_markdown``\ :
 
-.. code-block::
+.. code-block:: python
 
    with open("example.smd", "r") as fin:
        inp = fin.read()
@@ -65,7 +65,7 @@ The main purpose of SMD is to parse .smd documents. This is pretty simple in ``s
 
 if you wish to get back only html or css, do the following:
 
-.. code-block::
+.. code-block:: python
 
    html = smd.parse(inp, html=True)
    css = smd.parse(inp, css=True)
@@ -80,7 +80,7 @@ The same can be said of SMD - All Markdown documents are valid SMD documents, bu
 With that out of the way, what's the difference?
 
 A SMD document is made of layers.
-Each layer has a name, and can contain markdown content and/or other layers. 
+Each layer has a name, and can contain markdown content and/or other layers.
 
 .. code-block::
 
@@ -100,7 +100,7 @@ Here is the equivalent html.
      </div>
    </div>
 
-Essentially, a layer is a ``div``\ , the layer name being the ``div``\ 's class. 
+Essentially, a layer is a ``div``\ , the layer name being the ``div``\ 's class.
 Everything is put into a ``root div`` before the parsed SMD is returned.
 
 Nesting is pretty simple:
@@ -160,8 +160,8 @@ Note that the expanded html is longer and more verbose.
      </div>
    </div>
 
-So, what about styling? 
-I was feeling a bit lazy, and had to refactor a lot of code to introduce styling, so for now it's practically a one to one mapping to css. 
+So, what about styling?
+I was feeling a bit lazy, and had to refactor a lot of code to introduce styling, so for now it's practically a one to one mapping to css.
 Here's what styling looks like:
 
 .. code-block::
@@ -170,7 +170,7 @@ Here's what styling looks like:
        border = 1px solid
        font-family = sans-serif
 
-use the ``style`` keyword to indent a style block - then, for each line in the style block, put the element on the left, followed by an equals sign, followed by the attribute. 
+use the ``style`` keyword to indent a style block - then, for each line in the style block, put the element on the left, followed by an equals sign, followed by the attribute.
 
 .. code-block::
 

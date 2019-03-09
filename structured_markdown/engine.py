@@ -129,9 +129,7 @@ class StructuredMarkdown:
         if name == None:
             return html
 
-        return "<div class=\"{}\">\n{}\n</div>\n".format(
-            name, "\n".join(self.ind_type + line for line in html.split("\n")[:-1])
-        )
+        return wrap_html(html, "div", self.ind_type, name=name)
 
     def css(self, lines=None, selector=None):
         """
@@ -181,3 +179,11 @@ class StructuredMarkdown:
             css = css + "}\n"
 
         return css
+
+def wrap_html(to_wrap, tag, ind_type, name=None):
+    name = "" if name is None else " class={}".format(name)
+    return "<{}{}>\n{}\n</{}>\n".format(
+        tag, name,
+        "\n".join(ind_type + line for line in to_wrap.split("\n")[:-1]),
+        tag,
+    )

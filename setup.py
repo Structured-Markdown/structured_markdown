@@ -9,7 +9,7 @@ import setuptools
 # run the markdown to rst script
 # $ python rst_helper.py
 # git add and git commit change to github, merge with master
-# now, clear out build/* and dist/*
+# now, clear out build/* and dist/* and structured_markdown.egg-ingo
 # rm -rf dist build
 # cd to the project folder and type in terminal:
 # $ python setup.py develop
@@ -24,7 +24,7 @@ with open("README.rst", "r") as fin:
 
 setuptools.setup(
     name="structured_markdown",
-    version="0.1.1",
+    version="0.1.2",
     description="Add an extra dimension to your markdown documents",
     long_description=long_description,
     classifiers=[
