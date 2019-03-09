@@ -129,7 +129,7 @@ class StructuredMarkdown:
         if name == None:
             return html
 
-        return wrap_html(html, "div", self.ind_type, name=name)
+        return wrap_html(html, "div", name=name)
 
     def css(self, lines=None, selector=None):
         """
@@ -174,16 +174,16 @@ class StructuredMarkdown:
                     if len(attribute) != 2:
                         raise ValueError("extra or lack of equal sign in style assignment")
 
-                    css = css + self.ind_type + "{}: {};\n".format(*attribute)
+                    css = css + "  " + "{}: {};\n".format(*attribute)
 
             css = css + "}\n"
 
         return css
 
-def wrap_html(to_wrap, tag, ind_type, name=None):
+def wrap_html(to_wrap, tag, name=None):
     name = "" if name is None else " class={}".format(name)
     return "<{}{}>\n{}\n</{}>\n".format(
         tag, name,
-        "\n".join(ind_type + line for line in to_wrap.split("\n")[:-1]),
+        "\n".join("  " + line for line in to_wrap.split("\n")[:-1]),
         tag,
     )

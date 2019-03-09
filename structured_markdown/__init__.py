@@ -15,7 +15,7 @@ def css(inp):
     returns: parsed css string
     """
     smd_instance = StructuredMarkdown(inp)
-    return smd_instance.html(lines=None, selector=None)
+    return smd_instance.css(lines=None, selector=None)
 
 def parse(inp, name=None):
     """
@@ -48,11 +48,8 @@ def inline_style(inp, name=None):
     name: name of root div
     returns: parsed html string with <style></style> block
     """
-    smd_instance = StructuredMarkdown(inp)
-    html = smd_instance.html(lines=None, name=name),
-    css = smd_instance.css(lines=None, selector=None),
-
-    return wrap_html(css, "style", smd_instance.ind_type) + html
+    html, css = parse(inp, name=name)
+    return wrap_html(css, "style") + html
 
 def inline_style_from_file(file_name, name=None):
     """
