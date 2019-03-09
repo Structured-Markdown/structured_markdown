@@ -16,6 +16,7 @@ import setuptools
 # $ python setup.py sdist bdist_wheel
 # after that's done, type:
 # $ twine upload dist/*
+# check pypi: https://pypi.org/project/structured-markdown/
 # after it's uploaded, install the new version:
 # $ pip install --upgrade structured-markdown
 
