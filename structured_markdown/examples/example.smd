@@ -1,0 +1,57 @@
+layer navbar:
+    layer logotype:
+        **Templating Engine**
+    layer navlinks:
+        * [blog](/blog)
+        * [about](/about)
+        * [projects](/projects)
+
+layer body:
+    # Hello, everyone!
+    Welcome to my templating engine thingy.
+    This is essentially **heirarchal markdown**.
+    I'm planning to call ~~Formatted~~ Structured Markdown, or something.
+
+    Anyway, I'm just seeing how effective it is by writing it out like this.
+    (Oh, this should be a new paragraph, btw.)
+
+    ## This is a section header
+    That's cool.
+    [This is a link to nowhere...](/boop)
+
+    layer side-note:
+        Woah, this is a side note.
+        I can put emojis in. 🙌
+        **why are you paying attention to it?**
+
+    Well, that's about all I have to say...
+    There are still `some` kinks to work out, I plan to add the ability to style and stuff.
+    (And make the html it returns have proper formatting.)
+    Bye!
+
+    this is very {{ adjective }} inline insertion.
+    if you want to insert a layer, simply use:
+
+    template name
+
+    where template is a keyword, and name is the layer class.
+
+    ```
+    code code code
+        hey hey hey
+    ```
+
+layer posts:
+    # Recent Posts
+    {{ posts }}
+
+layer footer:
+    (c) 2018 Me.
+    Boop
+
+style layer:
+    border = 1px solid
+    font-family = sans-serif
+
+style layer.navbar:
+    background-color = #fff

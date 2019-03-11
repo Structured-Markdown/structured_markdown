@@ -1,3 +1,5 @@
+from structured_markdown import *
+
 import mistune
 import copy
 
@@ -35,51 +37,15 @@ class StructuredMarkdown:
         inp: string to be processed
         returns: New StructuredMarkdown Object
         """
-        # predefined
-        self.valid_ind = ["\t", "  ", "    "]
-        self.tokens = [
-            ":",
-            "=",
-        ]
-        self.keywords = [
-            "layer",
-            "style",
-        ]
-        self.mappings = {
-            "layer": "div",
-            "all": "*",
-        }
-
         self.dirty = inp.split("\n") # each line in inp
-        self.ind_type = self._infer_ind(self.dirty) # infer the indentation from first indent
+        self.ind_type = infer_ind(self.dirty) # infer the indentation from first indent
         self.lines = [Line(line, self.ind_type) for line in self.dirty] # create a list of Line objects
 
-    def _infer_ind(self, dirty):
-        """
-        self: StructuredMarkdown Object
-        dirty: list of "dirty" lines
-        returns: indentation type of the list self._valid_ind or ""
-        """
-        for line in dirty:
-            leading = line.replace(line.lstrip(), "")
-            if leading in self.valid_ind:
-                return leading
-            if leading != "" and leading != "\n" and leading not in self.valid_ind:
-                raise IndentationError("Indentation type unsupported ({}).".format(repr(leading)))
-        return ""
-
-    def _tokenize(self, line):
-        """
-        self: StructuredMarkdown Object
-        line: Line object to tokenize
-        returns: tokenized line, list of strs
-        """
-        line = str(line)
-
-        for token in self.tokens:
-            line = line.replace(token, " {} ".format(token))
-
-        return line.split()
+    def render(self, lines=None, name=None, templates={}):
+        # insert templates
+        html = self.html(lines=lines)
+        css = self.css(lines=lines)
+        return html, css
 
     def html(self, lines=None, name=None):
         """
@@ -95,9 +61,9 @@ class StructuredMarkdown:
 
         while len(lines) > 0:
             line = lines.pop(0)
-            tokenized = self._tokenize(line)
+            tokenized = tokenize(line)
 
-            if tokenized != [] and tokenized[0] in self.keywords and tokenized[-1] == ":":
+            if tokenized != [] and tokenized[0] in keywords and tokenized[-1] == ":":
                 scope_name = tokenized[1:-1]
 
                 if len(scope_name) > 1:
@@ -145,7 +111,7 @@ class StructuredMarkdown:
         if selector is None:
             while len(lines) > 0:
                 line = lines.pop(0)
-                tokenized = self._tokenize(line)
+                tokenized = tokenize(line)
 
                 if tokenized != [] and tokenized[0] in self.keywords and tokenized[-1] == ":":
                     scope = []
@@ -179,11 +145,3 @@ class StructuredMarkdown:
             css = css + "}\n"
 
         return css
-
-def wrap_html(to_wrap, tag, name=None):
-    name = "" if name is None else " class={}".format(name)
-    return "<{}{}>\n{}\n</{}>\n".format(
-        tag, name,
-        "\n".join("  " + line for line in to_wrap.split("\n")[:-1]),
-        tag,
-    )

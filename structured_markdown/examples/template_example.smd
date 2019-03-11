@@ -1,0 +1,5 @@
+layer blog:
+    ## {{ post_title }}
+    by {{ post_author }} on {{ publication_date }}
+
+    {{ post_description }}
