@@ -1,9 +1,5 @@
 from structured_markdown import *
 
-# def decorator_thingy(func):
-#     def wrapper(inp, name=None, templates={}):
-#         smd_instance = StructuredMarkdown(inp)
-
 def html(inp):
     """
     inp: SMD string to parse
@@ -11,7 +7,7 @@ def html(inp):
     returns: parsed html string
     """
     smd_instance = StructuredMarkdown(inp)
-    html, _ = smd_instance.render(inp)
+    html, _ = smd_instance.render(inp, **kwargs)
     return html
 
 def css(inp):
@@ -40,3 +36,7 @@ def inline_style(inp):
     """
     html, css = parse(inp)
     return wrap_html(css, "style") + html
+
+def wrap_document():
+    pass
+    # ability to append a header and <!DOCTYPE html> and stuff

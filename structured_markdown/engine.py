@@ -41,10 +41,13 @@ class StructuredMarkdown:
         self.ind_type = infer_ind(self.dirty) # infer the indentation from first indent
         self.lines = [Line(line, self.ind_type) for line in self.dirty] # create a list of Line objects
 
-    def render(self, lines=None, name=None, templates={}):
-        # insert templates
-        html = self.html(lines=lines)
-        css = self.css(lines=lines)
+    def render(self, **kwargs):
+        for line in self.lines:
+            for key, value in kwargs.items():
+                line = line.line.replace("{{{{ {} }}}}".format(key), value)
+
+        html = self.html()
+        css = self.css()
         return html, css
 
     def html(self, lines=None, name=None):
