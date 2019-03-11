@@ -32,7 +32,6 @@ setuptools.setup(
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: MIT License",
     "Intended Audience :: Developers",
-    "Intended Audience :: Information Technology",
     "Programming Language :: Python :: 3.7",
     "Topic :: Text Processing :: Markup",
     ],
@@ -40,7 +39,7 @@ setuptools.setup(
     author="Structured-Markdown",
     author_email="isaacimagine@gmail.com",
     license="MIT",
-    packages=setuptools.find_packages(),
+    packages=["structured_markdown"],
     install_requires=[
         "mistune",
         "m2r"
