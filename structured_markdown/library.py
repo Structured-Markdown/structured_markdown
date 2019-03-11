@@ -1,4 +1,14 @@
-from structured_markdown import *
+from . import *
+
+# these are library functions
+# this is how the user should mostly interact with the interface
+# they should be short, easy to read, and efficient
+# and also visible to the user
+
+# TODO: remove the
+# | smd_instance = StructuredMarkdown(inp)
+# | return smd_instance.render(inp, **kwargs)
+# | by making it a decorator or something
 
 def html(inp):
     """
@@ -36,7 +46,3 @@ def inline_style(inp):
     """
     html, css = parse(inp)
     return wrap_html(css, "style") + html
-
-def wrap_document():
-    pass
-    # ability to append a header and <!DOCTYPE html> and stuff

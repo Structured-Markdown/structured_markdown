@@ -1,4 +1,9 @@
-from structured_markdown import *
+from . import *
+
+# these are helper functions
+# they're used by classes and the like
+# but the user shouldn't have to deal with them unless they really want to
+# which is why they're not hidden
 
 # predefined
 valid_ind = ["\t", "  ", "    "]
@@ -17,17 +22,8 @@ mappings = {
     "all": "*",
 }
 
-def wrap_html(to_wrap, tag, name=None):
-    name = "" if name is None else " class={}".format(name)
-    return "<{}{}>\n{}\n</{}>\n".format(
-        tag, name,
-        "\n".join("  " + line for line in to_wrap.split("\n")[:-1]),
-        tag,
-    )
-
 def infer_ind(dirty):
     """
-    self: StructuredMarkdown Object
     dirty: list of "dirty" lines
     returns: indentation type of the list self._valid_ind or ""
     """
@@ -41,7 +37,6 @@ def infer_ind(dirty):
 
 def tokenize(self, line):
     """
-    self: StructuredMarkdown Object
     line: Line object to tokenize
     returns: tokenized line, list of strs
     """

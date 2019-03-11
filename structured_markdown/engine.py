@@ -1,7 +1,14 @@
-from structured_markdown import *
+from . import *
 
 import mistune
 import copy
+
+# this file is what I like to refer to as a "state module"
+# it contains the classes nesessary to implement the interface
+# but nothing more
+# the goal is to keep this file as short as possible
+# and do most of the interface implementation
+# through "logic" (or "functional") modules.
 
 class Line:
     __slots__ = ("line", "ind_type", "ind", "ind_level")
@@ -42,9 +49,14 @@ class StructuredMarkdown:
         self.lines = [Line(line, self.ind_type) for line in self.dirty] # create a list of Line objects
 
     def render(self, **kwargs):
+        # instead of looping through all items
+        # maybe loop through each line and check for templates
+        # then access the dictionary?
+        # should be a lot more efficient
         for line in self.lines:
             for key, value in kwargs.items():
                 line = line.line.replace("{{{{ {} }}}}".format(key), value)
+
 
         html = self.html()
         css = self.css()
