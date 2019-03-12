@@ -1,3 +1,5 @@
+from . import *
+
 import mistune
 import copy
 
@@ -121,7 +123,7 @@ class StructuredMarkdown:
             line = lines.pop(0)
             tokenized = self._tokenize(line)
 
-            if tokenized != [] and tokenized[0] in keywords and tokenized[-1] == ":":
+            if tokenized != [] and tokenized[0] in self.keywords and tokenized[-1] == ":":
                 scope_name = tokenized[1:-1]
 
                 if len(scope_name) > 1:
