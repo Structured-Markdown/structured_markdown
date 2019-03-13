@@ -25,7 +25,7 @@ with open("README.rst", "r") as fin:
 
 setuptools.setup(
     name="structured_markdown",
-    version="0.1.3",
+    version="0.2.0",
     description="Add an extra dimension to your markdown documents",
     long_description=long_description,
     classifiers=[
