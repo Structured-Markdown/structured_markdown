@@ -21,8 +21,15 @@ class Line:
         if self.ind == None:
             self._cleanse()
 
-    def __repr__(self): return "Line({}, {}, ind={})".format(self.line, self.ind_type, self.ind)
+    def __repr__(self):
+        return "Line({}, {}, ind={})".format(
+            repr(self.line),
+            repr(self.ind_type),
+            repr(self.ind),
+        )
+
     def __str__(self): return self.line
+
     def __int__(self): return self.ind
 
     def _indentation(self): return self.line.replace(self.line.lstrip(), "")
@@ -99,12 +106,17 @@ class StructuredMarkdown:
         # maybe loop through each line and check for templates
         # then access the dictionary?
         # should be a lot more efficient
-        for line in self.lines:
+        lines = copy.deepcopy(self.lines)
+        print(lines)
+        for line in lines:
             for key, value in kwargs.items():
-                line = line.line.replace("{{{{ {} }}}}".format(key), value)
+                template_tag = "{{{{ {} }}}}".format(key)
+                print(template_tag)
+                line.line = line.line.replace(template_tag, value)
+                print(line)
 
-        html = self.html()
-        css = self.css()
+        html = self.html(lines=lines)
+        css = self.css(lines=lines)
         return html, css
 
     def html(self, lines=None, name=None):
