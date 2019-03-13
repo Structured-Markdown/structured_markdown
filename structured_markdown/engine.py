@@ -115,11 +115,11 @@ class StructuredMarkdown:
                 line.line = line.line.replace(template_tag, value)
                 print(line)
 
-        html = self.html(lines=lines)
-        css = self.css(lines=lines)
+        html = self._html(lines=lines)
+        css = self._css(lines=lines)
         return html, css
 
-    def html(self, lines=None, name=None):
+    def _html(self, lines=None, name=None):
         """
         self: StructuredMarkdown Object
         lines: list of Line Objects to parse, if set to None self.lines is used
@@ -156,7 +156,7 @@ class StructuredMarkdown:
                 if tokenized[0] == "layer":
                     html = html + mistune.markdown(markdown)
                     markdown = ""
-                    html = html + self.html(scope, name=scope_name)
+                    html = html + self._html(scope, name=scope_name)
             else:
                 markdown = markdown + self.ind_type * int(line) + str(line)
 
@@ -169,7 +169,7 @@ class StructuredMarkdown:
 
         return wrap_html(html, "div", name=name)
 
-    def css(self, lines=None, selector=None):
+    def _css(self, lines=None, selector=None):
         """
         self: StructuredMarkdown Object
         lines: list of Line Objects to parse, if set to None self.lines is used
@@ -202,7 +202,7 @@ class StructuredMarkdown:
                         for key, value in self.mappings.items():
                             scope_selector = scope_selector.replace(key, value)
 
-                        css = css + self.css(scope, selector=scope_selector)
+                        css = css + self._css(scope, selector=scope_selector)
         else:
             css = "{} {{\n".format(selector)
 

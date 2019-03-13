@@ -1,51 +1,60 @@
 # Structured-Markdown
 I love markdown, but I've always wanted to use it to write more than just "flat" documents.
-Structured Markdown is an extension to markdown syntax that allows for nesting and styling within markdown documents.
+Structured Markdown is an extension to markdown syntax that allows for nesting, styling, and templating within markdown documents.
 So, how does it work?
 
+## Table of Contents
+Here are the different sections in this README.
+If you're looking for the documentation, it's [here](https://structured-markdown.gitbook.io/python/).
+
+* [Overview](#overview) - What's the difference between Structured Markdown and Vanilla Markdown? What's the point of this project?
+* [Installation](#installation) - How to install and setup the `structured_markdown` Python package.
+* [Usage](#usage) - Quick start guide on how to start using `structured_markdown` in your code.
+* [SMD vs MD](#smd-vs-md) - A deeper explanation of the differences between SMD and MD
+
 ## Overview
-SMD is currently a python module that parses SMD into formatted html and css.
-Currently, the module uses [mistune](https://github.com/lepture/mistune) to parse the markdown parts of .smd documents.
-The general idea is that a static site could use these easy-to-write SMD files in place of html templates or the like.
-If you're wondering what makes SMD so special, jump down to the [SMD vs MD](#smd-vs-md) section.
+Structured Markdown, or SMD, is a syntactic extension to Markdown.
+SMD documents support structuring, styling, and templating.
+`structured_markdown` is a Python module that parses SMD documents into formatted html and css.
+Currently, the module uses [mistune](https://github.com/lepture/mistune) to parse the markdown parts of SMD documents.
+this project aims to make SMD more commonplace in static site development.
+If you're wondering what makes SMD different from normal MD, jump down to the [SMD vs MD](#smd-vs-md) section.
 
 ## Installation
-Well, I finally got it working with pip, so
+To install the most recent stable version of `structured_markdown`, you can use `pip`.
+This project was written using `Python >= 3.7`, but most earlier versions of Python 3 should work.
 
 ```
-pip install structured-markdown
+$ pip install structured-markdown
 ```
 
-will now work!
-(I'm using `Python >= 3.7`, btw.)
-
-If you want to build from source, simply:
+If you like the bleeding edge, you can build from source.
 
 ```
-git clone https://github.com/Structured-Markdown/structured_markdown.git
-cd structured_markdown
-pip install .
+$ git clone https://github.com/Structured-Markdown/structured_markdown.git
+$ cd structured_markdown
+$ pip install .
 ```
 
-(At least, that's what works for me.)
-
-You may also need to install `mistune`, a markdown parser.
+You might also need to install `mistune`, a markdown parser, and m2r.
 
 ```
-pip install mistune
+$ pip install mistune
+$ pip install m2r
 ```
 
-Remember to use `pip3` if your working with Python 3.
-I always forget to use `pip3`, so I thought you might like a little reminder 👍.
+Remember to use `pip3` when working with Python 3.
+(I always forget to use `pip3`, so I thought you might like a little reminder 👍.)
 
 ## Usage
-To use SMD in your project, import it like so:
+To use `structured_markdown` in your projects, import it like so.
+(We recommend using `smd` as an import alias as `structured_markdown` is a bit long.)
 
 ```python
 import structured_markdown as smd
 ```
 
-The main purpose of SMD is to parse .smd documents. This is pretty simple in `structured_markdown`:
+The main purpose of `structured_markdown` is to parse SMD documents. This is pretty simple:
 
 ```python
 with open("example.smd", "r") as fin:
@@ -53,72 +62,120 @@ with open("example.smd", "r") as fin:
 
 html, css = smd.parse(inp)
 ```
-
-if you wish to get back only html or css, do the following:
+The `smd.parse` function takes a SMD string and returns formatted html and css
+There are many other functions availiable in the `structured_markdown` package.
 
 ```python
-html = smd.parse(inp, html=True)
-css = smd.parse(inp, css=True)
+html, css = smd.parse(inp)
+html = smd.html(inp) # return only the html of a SMD document
+css = smd.css(inp) # return only the css (styling) of a SMD document
+full_html = smd.inline_style(inp) # return the html with an added style block
 ```
 
-I'm planning to add templating capabilities to SMD, but it's not done yet 😔.
+`structured_markdown` also supports basic templating.
+We hope to extend `structured_markdown`'s templating features soon.
+
+If you want to quickly template in some fields, you can add additional keywords to `structured_markdown` function calls.
+For example, let's say you have the following SMD document called `template.smd`.
+
+```
+layer content:
+    # {{ title }}
+    SMD is pretty dang {{ adjective }}.
+    {{ comment }}
+
+style layer.content:
+    font-family = {{ font_name }}
+```
+
+In this document, we have 3 templating fields: `title`, `adjective`, and `font_name`.
+(Note that templating fields are wrapped in `{{}}`.
+There needs to be a space around each templating field: `{{ this_is_valid }}`, `{{this_is_not}}`.)
+To fill in these fields, we need to pass values to them.
+Here's an example.
+
+```python
+import structured_markdown as smd
+
+with open("example.smd", "r") as fin:
+    inp = fin.read()
+
+html, css = smd.parse(
+    inp,
+    title="Opinion on SMD",
+    adjective="snazzy",
+    comment="It's pretty neat"
+    font_name="sans-serif"
+)
+```
+
+You can even use pass markdown (and other SMD documents).
+
+```python
+html, css = smd.parse(
+    inp,
+    title="Opinion on SMD",
+    adjective="*snazzy*", # markdown styling
+    comment="layer comment:\n  It's pretty neat...", # SMD styling
+    font_name="sans-serif"
+)
+```
+
+That's a basic introduction to using SMD.
+I hope you find it enjoyable 😁.
 
 ## SMD vs MD
-All squares are rectangles, but not all rectangles are squares.
-The same can be said of SMD - All Markdown documents are valid SMD documents, but not necessarily the other way around.
-With that out of the way, what's the difference?
+This is a deeper dive into what SMD is and how it works.
+
+A Structured Markdown can be thought of an extension of Markdown.
+Just like how all squares are rectangles, but not all rectangles are squares, all Markdown documents are valid SMD documents, but not necessarily the other way around.
+So, what are the extensions that SMD offers?
 
 A SMD document is made of layers.
-Each layer has a name, and can contain markdown content and/or other layers.
+Each layer has a name and can contain markdown content and/or other layers.
 
 ```
 layer welcome:
   # Welcome to Structured-Markdown!
-  this is markdown embedded within a layer.
+  this is **Markdown** embedded within a layer.
 ```
 
 This is a block of markdown within a layer whose name is `welcome`.
 Here is the equivalent html.
 
 ```html
-<div class='root'>
-  <div class='welcome'>
-    <h1>Welcome to Structured-Markdown!</h1>
-    <p>this is markdown embedded within a layer.</p>
-  </div>
+<div class='welcome'>
+  <h1>Welcome to Structured-Markdown!</h1>
+  <p>this is markdown embedded within a layer.</p>
 </div>
 ```
 
 Essentially, a layer is a `div`, the layer name being the `div`'s class.
-Everything is put into a `root div` before the parsed SMD is returned.
-
 Nesting is pretty simple:
 
 ```
 layer welcome:
   # Welcome to Structured-Markdown!
-  this is markdown embedded within a layer.
+  this is **Markdown** embedded within a layer.
   layer nested:
-    hey, this is nested
-  more markdown after the nesting
+    Hey, this is nested.
+  more Markdown after the nesting.
 ```
 
 Which becomes:
 
 ```html
-<div class='root'>
+<div class='welcome'>
+  <h1>Welcome to Structured-Markdown!</h1>
+  <p>this is markdown embedded within a layer.</p>
   <div class='welcome'>
-    <h1>Welcome to Structured-Markdown!</h1>
-    <p>this is markdown embedded within a layer.</p>
-    <div class='welcome'>
-      <p>hey, this is nested</p>
-    </div>
-    <p>more markdown after the nesting</p>
+    <p>hey, this is nested</p>
   </div>
+  <p>more markdown after the nesting</p>
 </div>
 ```
 
-Where it really shines is when text is wrapped in complex formatting, like this navbar example:
+Here is some simple SMD that expands to a lot more html:
 
 ```
 layer navbar:
@@ -130,27 +187,25 @@ layer navbar:
         3. [projects](/projects)
 ```
 
-Note that the expanded html is longer and more verbose.
+Here's the equivalent html.
 
 ```html
-<div class='root'>
-  <div class='navbar'>
-    <div class='logotype'>
-      <h1>Templating Engine</h1>
-    </div>
-    <div class='navlinks'>
-      <ol>
+<div class='navbar'>
+  <div class='logotype'>
+    <h1>Templating Engine</h1>
+  </div>
+  <div class='navlinks'>
+    <ol>
       <li><a href="/blog">blog</a></li>
       <li><a href="/about">about</a></li>
       <li><a href="/projects">projects</a></li>
-      </ol>
-    </div>
+    </ol>
   </div>
 </div>
 ```
 
 So, what about styling?
-I was feeling a bit lazy, and had to refactor a lot of code to introduce styling, so for now it's practically a one to one mapping to css.
+(Side Note: when I was implementing styling support, I had to refactor a large amount of code. because of this I didn't have time to implement a more advanced form of styling, so for now it's essentially a one to one mapping to css.)
 Here's what styling looks like:
 
 ```
@@ -159,7 +214,9 @@ style layer:
     font-family = sans-serif
 ```
 
-use the `style` keyword to indent a style block - then, for each line in the style block, put the element on the left, followed by an equals sign, followed by the attribute.
+Style blocks are created using the `style` keyword to indent a style block.
+After the style block is a css selector.
+For each line in the style block, put the css element on the left, followed by an equals sign, followed by the attribute.
 
 ```
 style layer.navbar:
@@ -167,7 +224,8 @@ style layer.navbar:
 ```
 
 All normal css selectors should work, note that you should use the word `layer` instead of `div`.
-(You can still use div if you'd like, layer makes it look more readable.)
+(You can still use `div` if you'd like, `layer` makes it look more readable and unified in my opinion.)
+Here's another example fo a selector.
 
 ```
 layer.navbar a:hover:
@@ -176,5 +234,6 @@ layer.navbar a:hover:
 
 When parsed, SMD style blocks are fully transpiled into css. Hopefully, in the future I'll've implemented a better styling system, but this is what's here to stay for now.
 
-That's about it for now.
-Not all features are implemented as this is still a WIP.
+[The section on templating is not completed yet...]
+
+That's all for now. Thanks for following along this far.
