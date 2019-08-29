@@ -167,6 +167,8 @@ class StructuredMarkdown:
         if name == None:
             return html
 
+        print(dir)
+
         return wrap_html(html, "div", name=name)
 
     def _css(self, lines=None, selector=None):
