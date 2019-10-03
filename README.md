@@ -234,6 +234,20 @@ layer.navbar a:hover:
 
 When parsed, SMD style blocks are fully transpiled into css. Hopefully, in the future I'll've implemented a better styling system, but this is what's here to stay for now.
 
-[The section on templating is not completed yet...]
+Anyway, SMD also supports templating.
+Here's how that works
+
+
 
 That's all for now. Thanks for following along this far.
+
+## Goals for 1.0
+* Fully implemented formatting.
+* Finalized library interface.
+* Complete documentation.
+* Proper markdown parsing.
+* Better styling.
+* Static web app complete.
+* Utility functions.
+* Complete Unit tests.
+*
